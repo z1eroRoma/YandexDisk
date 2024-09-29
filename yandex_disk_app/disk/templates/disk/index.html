@@ -1,0 +1,66 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Яндекс.Диск</title>
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <style>
+        body {
+            background-color: #e9ecef;
+            font-family: 'Arial', sans-serif;
+        }
+        .container {
+            margin-top: 80px;
+            text-align: center; /* Центрирование содержимого */
+        }
+        .card {
+            margin: auto; /* Центрирование карточки */
+            transition: transform 0.2s;
+            border: none;
+            border-radius: 10px;
+            background: white;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            width: 400px; /* Задаём фиксированную ширину для карточки */
+        }
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        .btn-custom {
+            background-color: #4a90e2;
+            color: white;
+            border-radius: 20px;
+            padding: 10px 20px;
+        }
+        .btn-custom:hover {
+            background-color: #357ABD;
+        }
+        h1 {
+            color: #343a40;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1 class="text-center mb-4">Добро пожаловать на Яндекс.Диск</h1>
+
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Введите публичную ссылку</h5>
+            <form method="POST">
+                {% csrf_token %}
+                <div class="form-group">
+                    <input type="text" name="public_key" class="form-control" placeholder="Публичная ссылка" required>
+                </div>
+                <button type="submit" class="btn btn-custom btn-block">Отправить</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+</body>
+</html>

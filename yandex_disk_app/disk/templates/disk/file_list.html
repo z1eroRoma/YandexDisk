@@ -1,0 +1,124 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Список файлов на Яндекс.Диске</title>
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <style>
+        body {
+            background-color: #f4f4f4;
+            font-family: 'Arial', sans-serif;
+        }
+        .container {
+            margin-top: 80px;
+        }
+        h2 {
+            color: #343a40;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .filter-form {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .file-card {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            height: 250px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin: 10px 0;
+        }
+        .file-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.2);
+        }
+        .file-thumbnail {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 10px;
+        }
+        .file-name {
+            text-align: center;
+            margin: 0;
+            font-weight: bold;
+            color: #007bff;
+            margin-bottom: 10px;
+        }
+        .btn-custom {
+            background-color: #28a745;
+            color: white;
+            border-radius: 20px;
+            width: 100%;
+            border: none;
+            padding: 10px;
+        }
+        .btn-custom:hover {
+            background-color: #218838;
+        }
+        .no-files {
+            text-align: center;
+            font-size: 18px;
+            color: #dc3545;
+        }
+        .row {
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Список файлов на Яндекс.Диске</h2>
+
+    <form method="GET" class="filter-form">
+        <div class="row justify-content-center">
+            <div class="col-md-4">
+                {{ filter_form.file_type.label_tag }}
+                {{ filter_form.file_type }}
+            </div>
+            <div class="col-md-4">
+                <button type="submit" class="btn btn-primary">Фильтровать</button>
+            </div>
+        </div>
+    </form>
+
+    <form method="POST" action="{% url 'download_files' %}" id="download-form">
+        {% csrf_token %}
+        <div class="row">
+            {% for file in files %}
+                <div class="col-md-4 d-flex justify-content-center">
+                    <div class="file-card">
+                        {% if file.is_image %}
+                            <img src="{{ file.preview }}" alt="{{ file.name }}" class="file-thumbnail">
+                        {% else %}
+                            <img src="https://via.placeholder.com/80?text=File" alt="file icon" class="file-thumbnail">
+                        {% endif %}
+                        <p class="file-name">{{ file.name }}</p>
+                        <a href="{% url 'download_file' file.path %}" class="btn btn-custom">Скачать</a>
+                    </div>
+                </div>
+            {% empty %}
+                <div class="col-12">
+                    <p class="no-files">Нет доступных файлов.</p>
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="text-center">
+            <button type="submit" class="btn btn-success mt-3">Скачать выбранные файлы</button>
+        </div>
+    </form>
+</div>
+
+<script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+</body>
+</html>
